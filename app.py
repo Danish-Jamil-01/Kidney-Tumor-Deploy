@@ -4,7 +4,7 @@ from PIL import Image
 import numpy as np
 
 # --- 1. Load your trained model and define labels ---
-model = tf.keras.models.load_model("kidney_tumor_model.h5")
+model = tf.keras.models.load_model("kidney_model_unbiased_v1.h5")
 labels = ['Cyst', 'Normal', 'Stone', 'Tumor']
 
 # --- 2. Define the prediction function ---
@@ -43,13 +43,12 @@ body {
 """
 
 # --- 4. Build the UI with gr.Blocks ---
-with gr.Blocks(css=css, theme='NoCrypt/Mochi') as demo:
+with gr.Blocks(css=css) as demo: # <-- THEME HAS BEEN REMOVED HERE
     with gr.Row():
         with gr.Column(scale=2):
             gr.Markdown("# Kidney Disease Detector", elem_id="title")
             gr.Markdown("Upload a kidney CT scan to detect the disease type (Cyst, Normal, Stone, or Tumor).", elem_id="description")
         with gr.Column(scale=1):
-            # The interactive 3D model is embedded here
             gr.Markdown("""
             <iframe title="Kidney Anatomy 3D" frameborder="0" allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true" allow="autoplay; fullscreen; xr-spatial-tracking" xr-spatial-tracking execution-while-out-of-viewport execution-while-not-rendered web-share src="https://sketchfab.com/models/c391fd03fa9240448a600d40f5c1d799/embed" style="width: 100%; height: 250px;"></iframe>
             """)
@@ -62,11 +61,19 @@ with gr.Blocks(css=css, theme='NoCrypt/Mochi') as demo:
             output_label = gr.Label(num_top_classes=4, label="Prediction")
             
     gr.Examples(
-        examples=["cyst_example.jpg", "normal_example.jpg", "stone_example.jpg", "tumor_example.jpg"],
+        examples=[
+        ["cyst_example_1.jpg"],
+        ["cyst_example_2.jpg"],
+        ["normal_example_1.jpg"],
+        ["normal_example_2.jpg"],
+        ["stone_example_1.jpg"],
+        ["stone_example_2.jpg"],
+        ["tumor_example_1.jpg"],
+        ["tumor_example_2.jpg"]
+    ],
         inputs=input_image
     )
     
-    # Define the button's click event
     submit_btn.click(
         fn=predict,
         inputs=input_image,
@@ -75,3 +82,4 @@ with gr.Blocks(css=css, theme='NoCrypt/Mochi') as demo:
 
 # --- 5. Launch the app ---
 demo.launch()
+
