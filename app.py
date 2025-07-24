@@ -18,41 +18,16 @@ def predict(image):
     return confidences
 
 # --- 3. Create a Custom Theme for Colors ---
-# This will make the button and output bars red
 theme = gr.themes.Soft(
     primary_hue="red",
     secondary_hue="pink",
 )
 
-# --- 4. Custom CSS for Background and Glassmorphism ---
-css = """
-/* This targets the main app container, which is more reliable */
-.gradio-container {
-    background-image: url('/file=background.png');
-    background-size: cover;
-}
-.gr-panel {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(15px);
-    border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-}
-#title {
-    color: white;
-    font-size: 40px;
-    text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
-}
-#description {
-    color: #E0E0E0;
-    text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
-}
-"""
-
-# --- 5. Build the UI with the Theme and CSS ---
-with gr.Blocks(theme=theme, css=css) as demo:
-    gr.Markdown("# Kidney Disease Detector", elem_id="title")
-    gr.Markdown("Upload a kidney CT scan to detect the disease type (Cyst, Normal, Stone, or Tumor).", elem_id="description")
+# --- 4. Build the UI with the Theme ---
+# The unused CSS has been removed.
+with gr.Blocks(theme=theme) as demo:
+    gr.Markdown("# Kidney Disease Detector")
+    gr.Markdown("Upload a kidney CT scan to detect the disease type (Cyst, Normal, Stone, or Tumor).")
 
     with gr.Row():
         with gr.Column(scale=2):
@@ -60,7 +35,7 @@ with gr.Blocks(theme=theme, css=css) as demo:
             submit_btn = gr.Button("Submit")
         with gr.Column(scale=1):
             output_label = gr.Label(num_top_classes=4, label="Prediction")
-            
+
     gr.Examples(
         examples=[
             ["cyst_example_1.jpg"],
@@ -74,12 +49,12 @@ with gr.Blocks(theme=theme, css=css) as demo:
         ],
         inputs=input_image
     )
-    
+
     submit_btn.click(
         fn=predict,
         inputs=input_image,
         outputs=output_label
     )
 
-# --- 6. Launch the app ---
+# --- 5. Launch the app ---
 demo.launch()
