@@ -9,54 +9,56 @@ labels = ['Cyst', 'Normal', 'Stone', 'Tumor']
 
 # --- 2. Define the prediction function ---
 def predict(image):
-    # Process the image for the model
     image = Image.fromarray(image.astype('uint8'), 'RGB')
     image = image.resize((64, 64))
     image = np.array(image) / 255.0
     image = np.expand_dims(image, axis=0)
-    
-    # Make prediction
     prediction_array = model.predict(image)[0]
-    
-    # Format the output for the Label component
     confidences = {labels[i]: float(prediction_array[i]) for i in range(len(labels))}
     return confidences
 
 # --- 3. Create a Custom Theme ---
-# We'll stick with the Soft theme, as it supports both light and dark modes.
+# This will keep your red/pink accents on the default dark theme
 theme = gr.themes.Soft(
     primary_hue="red",
     secondary_hue="pink",
 )
 
-# --- 4. Custom CSS for a Light Theme Appearance ---
+# --- 4. Custom CSS for Background and DARK THEME Glassmorphism ---
+# This CSS is optimized for the dark background you have.
 css = """
-/* Using a direct URL is more reliable for background images */
+/* This will now work because background.png is in your repository */
 .gradio-container {
-    background-image: url('http://googleusercontent.com/image_generation_content/4');
+    background-image: url('/file=background.png');
     background-size: cover;
     background-position: center;
 }
 
-/* Glassmorphism panel style adjusted for a light background */
+/* Glassmorphism style that looks good on a dark background */
 .gr-panel {
-    background: rgba(255, 255, 255, 0.4); /* Made it more opaque white for readability */
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: rgba(255, 255, 255, 0.1); /* More transparent white */
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px); /* For Safari compatibility */
     border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
 }
 
-/* Text colors changed to be dark, so they are visible on a light background */
+/* White text colors are needed for the dark theme */
 #title {
-    color: #4a4a4a; /* Dark gray for the title */
+    color: white;
     font-size: 40px;
-    text-shadow: 1px 1px 2px rgba(255,255,255,0.7);
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
 }
 #description {
-    color: #575757; /* Slightly lighter gray for description */
-    text-shadow: 1px 1px 2px rgba(255,255,255,0.5);
+    color: #E0E0E0; /* Light gray for description */
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
+}
+
+/* Making the buttons slightly transparent too */
+.gr-button {
+    background: rgba(255, 0, 0, 0.5);
+    border-color: rgba(255, 0, 0, 0.7);
 }
 """
 
@@ -71,7 +73,7 @@ with gr.Blocks(theme=theme, css=css) as demo:
             submit_btn = gr.Button("Submit")
         with gr.Column(scale=1):
             output_label = gr.Label(num_top_classes=4, label="Prediction")
-            
+
     gr.Examples(
         examples=[
             "cyst_example_1.jpg", "cyst_example_2.jpg",
@@ -80,9 +82,9 @@ with gr.Blocks(theme=theme, css=css) as demo:
             "tumor_example_1.jpg", "tumor_example_2.jpg"
         ],
         inputs=input_image,
-        label="Examples" # Added a label for clarity
+        label="Examples"
     )
-    
+
     submit_btn.click(
         fn=predict,
         inputs=input_image,
