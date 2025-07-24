@@ -17,13 +17,20 @@ def predict(image):
     confidences = {labels[i]: float(prediction_array[i]) for i in range(len(labels))}
     return confidences
 
-# --- 3. Custom CSS for Glassmorphism and 3D Text Effect ---
+# --- 3. Create a Custom Theme for Colors ---
+# This will make the button and output bars red
+theme = gr.themes.Soft(
+    primary_hue="red",
+    secondary_hue="pink",
+)
+
+# --- 4. Custom CSS for Background and Glassmorphism ---
 css = """
-body {
+/* This targets the main app container, which is more reliable */
+.gradio-container {
     background-image: url('/file=background.png');
     background-size: cover;
 }
-.gradio-container { background: none; }
 .gr-panel {
     background: rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(15px);
@@ -42,8 +49,8 @@ body {
 }
 """
 
-# --- 4. Build the UI with gr.Blocks ---
-with gr.Blocks(css=css) as demo:
+# --- 5. Build the UI with the Theme and CSS ---
+with gr.Blocks(theme=theme, css=css) as demo:
     gr.Markdown("# Kidney Disease Detector", elem_id="title")
     gr.Markdown("Upload a kidney CT scan to detect the disease type (Cyst, Normal, Stone, or Tumor).", elem_id="description")
 
@@ -54,7 +61,6 @@ with gr.Blocks(css=css) as demo:
         with gr.Column(scale=1):
             output_label = gr.Label(num_top_classes=4, label="Prediction")
             
-    # Examples have been updated as requested
     gr.Examples(
         examples=[
             ["cyst_example_1.jpg"],
@@ -69,12 +75,11 @@ with gr.Blocks(css=css) as demo:
         inputs=input_image
     )
     
-    # Define the button's click event
     submit_btn.click(
         fn=predict,
         inputs=input_image,
         outputs=output_label
     )
 
-# --- 5. Launch the app ---
+# --- 6. Launch the app ---
 demo.launch()
