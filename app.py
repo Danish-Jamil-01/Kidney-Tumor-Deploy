@@ -4,7 +4,7 @@ from PIL import Image
 import numpy as np
 
 # Load your trained model
-model = tf.keras.models.load_model("kidney_tumor_model_final_robust.h5")
+model = tf.keras.models.load_model("kidney_tumor_model.h5")
 
 # Define the labels for your 4 classes
 # Make sure the order matches how you trained your model: 0=Cyst, 1=Normal, 2=Stone, 3=Tumor
