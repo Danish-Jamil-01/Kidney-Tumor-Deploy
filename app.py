@@ -5,6 +5,11 @@ import numpy as np
 
 # --- 1. Load your trained model and define labels ---
 model = tf.keras.models.load_model("kidney_tumor_model.h5")
+
+# --- THIS IS THE NEW LINE TO FIX THE ERROR ---
+# Re-compile the model with a standard optimizer to resolve version conflicts.
+model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+
 labels = ['Cyst', 'Normal', 'Stone', 'Tumor']
 
 # --- 2. Define the prediction function ---
@@ -25,14 +30,11 @@ theme = gr.themes.Soft(
 
 # --- 4. Custom CSS for Background and DARK THEME Glassmorphism ---
 css = """
-/* This path requires a manual restart to be loaded correctly */
 .gradio-container {
     background-image: url('/file=background.png');
     background-size: cover;
     background-position: center;
 }
-
-/* Glassmorphism style that looks good on a dark background */
 .gr-panel {
     background: rgba(255, 255, 255, 0.1); 
     backdrop-filter: blur(15px);
@@ -41,8 +43,6 @@ css = """
     border: 1px solid rgba(255, 255, 255, 0.15);
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
 }
-
-/* White text colors are needed for the dark theme */
 #title {
     color: white;
     font-size: 40px;
@@ -78,7 +78,10 @@ with gr.Blocks(theme=theme, css=css) as demo:
     )
 
     submit_btn.click(
-    fn=predict,
-    inputs=input_image,
-    outputs=output_label
-)
+        fn=predict,
+        inputs=input_image,
+        outputs=output_label
+    )
+
+# --- 6. Launch the app ---
+demo.launch()
