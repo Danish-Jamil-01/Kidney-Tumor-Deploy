@@ -1,49 +1,24 @@
 import gradio as gr
-import tensorflow as tf
-from tensorflow.keras import layers, models
+# import tensorflow as tf  <- We are commenting out TensorFlow entirely
+# from tensorflow.keras import layers, models
 from PIL import Image
 import numpy as np
 
-# --- 1. Recreate the Model Architecture ---
-# This function defines a standard CNN structure.
-def create_model():
-    model = models.Sequential([
-        # The input shape matches the size your images are resized to (64x64 with 3 color channels)
-        layers.Conv2D(32, (3, 3), activation='relu', input_shape=(64, 64, 3)),
-        layers.MaxPooling2D((2, 2)),
-        layers.Conv2D(64, (3, 3), activation='relu'),
-        layers.MaxPooling2D((2, 2)),
-        layers.Conv2D(128, (3, 3), activation='relu'),
-        layers.MaxPooling2D((2, 2)),
-        layers.Flatten(),
-        layers.Dense(128, activation='relu'),
-        # The output layer has 4 units for your 4 classes
-        layers.Dense(4, activation='softmax')
-    ])
-    return model
-
-# --- 2. Load the Model Weights ---
-# Create the model structure
-model = create_model()
-# Load ONLY the saved weights into this structure, ignoring the old optimizer/config
-model.load_weights('kidney_tumor_model.h5')
-# Compile the model with a modern optimizer so it can be used for predictions
-model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+# --- All model loading code is removed ---
 
 # Define the class labels
 labels = ['Cyst', 'Normal', 'Stone', 'Tumor']
 
-# --- 3. Define the Prediction Function ---
+# --- A "Dummy" Prediction Function ---
+# This function does NOT use a model. It takes an image but returns a fixed result.
+# This is to test if the Gradio application itself can launch.
 def predict(image):
-    image = Image.fromarray(image.astype('uint8'), 'RGB')
-    image = image.resize((64, 64))
-    image = np.array(image) / 255.0
-    image = np.expand_dims(image, axis=0)
-    prediction_array = model.predict(image)[0]
-    confidences = {labels[i]: float(prediction_array[i]) for i in range(len(labels))}
+    print("Dummy predict function called. If you see this, the UI is working.")
+    # Return a hard-coded dictionary to show in the output label.
+    confidences = {'Cyst': 0.75, 'Normal': 0.15, 'Stone': 0.05, 'Tumor': 0.05}
     return confidences
 
-# --- 4. Create a Custom Theme and CSS ---
+# --- Create a Custom Theme and CSS ---
 theme = gr.themes.Soft(primary_hue="red", secondary_hue="pink")
 css = """
 .gradio-container {
@@ -63,7 +38,7 @@ css = """
 #description { color: #E0E0E0; text-shadow: 1px 1px 4px rgba(0,0,0,0.6); }
 """
 
-# --- 5. Build the UI ---
+# --- Build the UI ---
 with gr.Blocks(theme=theme, css=css) as demo:
     gr.Markdown("# Kidney Disease Detector", elem_id="title")
     gr.Markdown("Upload a kidney CT scan to detect the disease type (Cyst, Normal, Stone, or Tumor).", elem_id="description")
@@ -92,5 +67,5 @@ with gr.Blocks(theme=theme, css=css) as demo:
         outputs=output_label
     )
 
-# --- 6. Launch the App ---
+# --- Launch the App ---
 demo.launch()
