@@ -20,7 +20,7 @@ def predict(image):
 # --- 3. Custom CSS for Glassmorphism and 3D Text Effect ---
 css = """
 body {
-    background-image: url('https://images.unsplash.com/photo-1531685250784-7569952593d2?q=80&w=2874&auto=format&fit=crop');
+    background-image: url('/file=background.png');
     background-size: cover;
 }
 .gradio-container { background: none; }
@@ -43,15 +43,9 @@ body {
 """
 
 # --- 4. Build the UI with gr.Blocks ---
-with gr.Blocks(css=css) as demo: # <-- THEME HAS BEEN REMOVED HERE
-    with gr.Row():
-        with gr.Column(scale=2):
-            gr.Markdown("# Kidney Disease Detector", elem_id="title")
-            gr.Markdown("Upload a kidney CT scan to detect the disease type (Cyst, Normal, Stone, or Tumor).", elem_id="description")
-        with gr.Column(scale=1):
-            gr.Markdown("""
-            <iframe title="Kidney Anatomy 3D" frameborder="0" allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true" allow="autoplay; fullscreen; xr-spatial-tracking" xr-spatial-tracking execution-while-out-of-viewport execution-while-not-rendered web-share src="https://sketchfab.com/models/c391fd03fa9240448a600d40f5c1d799/embed" style="width: 100%; height: 250px;"></iframe>
-            """)
+with gr.Blocks(css=css) as demo:
+    gr.Markdown("# Kidney Disease Detector", elem_id="title")
+    gr.Markdown("Upload a kidney CT scan to detect the disease type (Cyst, Normal, Stone, or Tumor).", elem_id="description")
 
     with gr.Row():
         with gr.Column(scale=2):
@@ -60,20 +54,22 @@ with gr.Blocks(css=css) as demo: # <-- THEME HAS BEEN REMOVED HERE
         with gr.Column(scale=1):
             output_label = gr.Label(num_top_classes=4, label="Prediction")
             
+    # Examples have been updated as requested
     gr.Examples(
         examples=[
-        ["cyst_example_1.jpg"],
-        ["cyst_example_2.jpg"],
-        ["normal_example_1.jpg"],
-        ["normal_example_2.jpg"],
-        ["stone_example_1.jpg"],
-        ["stone_example_2.jpg"],
-        ["tumor_example_1.jpg"],
-        ["tumor_example_2.jpg"]
-    ],
+            ["cyst_example_1.jpg"],
+            ["cyst_example_2.jpg"],
+            ["normal_example_1.jpg"],
+            ["normal_example_2.jpg"],
+            ["stone_example_1.jpg"],
+            ["stone_example_2.jpg"],
+            ["tumor_example_1.jpg"],
+            ["tumor_example_2.jpg"]
+        ],
         inputs=input_image
     )
     
+    # Define the button's click event
     submit_btn.click(
         fn=predict,
         inputs=input_image,
@@ -82,4 +78,3 @@ with gr.Blocks(css=css) as demo: # <-- THEME HAS BEEN REMOVED HERE
 
 # --- 5. Launch the app ---
 demo.launch()
-
