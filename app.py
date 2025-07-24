@@ -24,7 +24,6 @@ theme = gr.themes.Soft(
 )
 
 # --- 4. Build the UI with the Theme ---
-# The unused CSS has been removed.
 with gr.Blocks(theme=theme) as demo:
     gr.Markdown("# Kidney Disease Detector")
     gr.Markdown("Upload a kidney CT scan to detect the disease type (Cyst, Normal, Stone, or Tumor).")
@@ -56,5 +55,5 @@ with gr.Blocks(theme=theme) as demo:
         outputs=output_label
     )
 
-# --- 5. Launch the app ---
-demo.launch()
+# --- 5. Launch the app with sharing enabled ---
+demo.launch(share=True)
