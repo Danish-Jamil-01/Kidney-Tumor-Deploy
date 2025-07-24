@@ -18,16 +18,14 @@ def predict(image):
     return confidences
 
 # --- 3. Create a Custom Theme ---
-# This will keep your red/pink accents on the default dark theme
 theme = gr.themes.Soft(
     primary_hue="red",
     secondary_hue="pink",
 )
 
 # --- 4. Custom CSS for Background and DARK THEME Glassmorphism ---
-# This CSS is optimized for the dark background you have.
 css = """
-/* This will now work because background.png is in your repository */
+/* This path requires a manual restart to be loaded correctly */
 .gradio-container {
     background-image: url('/file=background.png');
     background-size: cover;
@@ -36,9 +34,9 @@ css = """
 
 /* Glassmorphism style that looks good on a dark background */
 .gr-panel {
-    background: rgba(255, 255, 255, 0.1); /* More transparent white */
+    background: rgba(255, 255, 255, 0.1); 
     backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px); /* For Safari compatibility */
+    -webkit-backdrop-filter: blur(15px); 
     border-radius: 20px;
     border: 1px solid rgba(255, 255, 255, 0.15);
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
@@ -51,14 +49,8 @@ css = """
     text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
 }
 #description {
-    color: #E0E0E0; /* Light gray for description */
+    color: #E0E0E0;
     text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
-}
-
-/* Making the buttons slightly transparent too */
-.gr-button {
-    background: rgba(255, 0, 0, 0.5);
-    border-color: rgba(255, 0, 0, 0.7);
 }
 """
 
@@ -88,8 +80,4 @@ with gr.Blocks(theme=theme, css=css) as demo:
     submit_btn.click(
         fn=predict,
         inputs=input_image,
-        outputs=output_label
-    )
-
-# --- 6. Launch the app ---
-demo.launch()
+        outputs
