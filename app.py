@@ -78,6 +78,7 @@ with gr.Blocks(theme=theme, css=css) as demo:
     )
 
     submit_btn.click(
-        fn=predict,
-        inputs=input_image,
-        outputs
+    fn=predict,
+    inputs=input_image,
+    outputs=output_label
+)
