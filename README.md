@@ -1,11 +1,14 @@
 ---
-title: Kidney Disease Detector
-emoji: 🔬
+title: Kidney Tumor Detector
+emoji: 🏢
 colorFrom: yellow
 colorTo: pink
 sdk: gradio
+sdk_version: 5.38.1
 app_file: app.py
+pinned: false
+license: mit
+short_description: Detects kidney diseases from CT scans.
 ---
 
-# Kidney Disease Detector
-This is an AI model to detect kidney diseases (Cyst, Normal, Stone, or Tumor) from CT scans.
+Check out the configuration reference at https://huggingface.co/docs/hub/spaces-config-reference

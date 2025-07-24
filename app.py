@@ -4,7 +4,7 @@ from PIL import Image
 import numpy as np
 
 # --- 1. Load your trained model and define labels ---
-model = tf.keras.models.load_model("kidney_model_unbiased_v1.h5")
+model = tf.keras.models.load_model("kidney_tumor_model.h5")
 labels = ['Cyst', 'Normal', 'Stone', 'Tumor']
 
 # --- 2. Define the prediction function ---
